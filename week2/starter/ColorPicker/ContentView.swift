@@ -47,8 +47,8 @@ struct ContentView: View {
 
       RoundedRectangle(cornerRadius: 0)
         .foregroundColor(foregroundColor)
-        .border(.black)
-
+        .border(.white)
+        .padding(.bottom, 20)
       VStack {
         Text("Red")
         HStack {
@@ -76,6 +76,19 @@ struct ContentView: View {
       Button("Set Color") {
         foregroundColor = Color(red: redColor / 255, green: greenColor / 255, blue: blueColor / 255)
       }
+      .padding(20)
+      .background(
+        Color(.blue)
+      )
+      .overlay(
+        RoundedRectangle(cornerRadius: 21.0)
+          .strokeBorder(.white, lineWidth: 2.0)
+      )
+      .foregroundColor(
+        Color(.white)
+      )
+      .cornerRadius(21)
+      .bold()
     }
     .background(Color("MainBackgroundColor"))
     .padding(20)
@@ -86,5 +99,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
     ContentView()
+    ContentView()
+      .preferredColorScheme(.dark)
   }
 }
