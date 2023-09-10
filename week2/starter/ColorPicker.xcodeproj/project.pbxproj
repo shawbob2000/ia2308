@@ -321,6 +321,7 @@
 				DEVELOPMENT_TEAM = BBK84N9JY9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ColorPicker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bull's Eye";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -342,6 +343,7 @@
 				DEVELOPMENT_TEAM = BBK84N9JY9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ColorPicker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Bull's Eye";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

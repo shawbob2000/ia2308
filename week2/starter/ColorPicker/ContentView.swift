@@ -38,22 +38,44 @@ struct ContentView: View {
   @State private var greenColor: Double = 0.0
   @State private var blueColor: Double = 0.0
   @State private var foregroundColor = Color(red: 0, green: 0, blue: 0)
-
+  
+  @Environment(\.verticalSizeClass) var verticalSizeClass
+  @Environment(\.horizontalSizeClass) var horizontalSizeClass
+  
   var body: some View {
-
+    
+    
+    let isPortraitMode = verticalSizeClass == .regular && horizontalSizeClass == .compact
+    
     VStack {
       BannerText(text: "Color Picker")
-
-      RoundedRectangle(cornerRadius: Constants.General.roundRectCornerRadius)
-        .foregroundColor(foregroundColor)
-        .border(.white)
-        .padding(.bottom, Constants.General.standardPadding)
-
-      ColorSliderView(sliderColor: $redColor, colorName: "Red", accentColor: .red)
-      ColorSliderView(sliderColor: $greenColor, colorName: "Green", accentColor: .green)
-      ColorSliderView(sliderColor: $blueColor, colorName: "Blue", accentColor: .blue)
-
-      SetColorButton(redColor: $redColor, greenColor: $greenColor, blueColor: $blueColor, foregroundColor: $foregroundColor)
+      
+      if isPortraitMode {
+        RoundedRectangle(cornerRadius: Constants.General.roundRectCornerRadius)
+          .foregroundColor(foregroundColor)
+          .border(.white)
+          .padding(.bottom, Constants.General.standardPadding)
+        
+        ColorSliderView(sliderColor: $redColor, colorName: "Red", accentColor: .red)
+        ColorSliderView(sliderColor: $greenColor, colorName: "Green", accentColor: .green)
+        ColorSliderView(sliderColor: $blueColor, colorName: "Blue", accentColor: .blue)
+        
+        SetColorButton(redColor: $redColor, greenColor: $greenColor, blueColor: $blueColor, foregroundColor: $foregroundColor)
+      } else {
+        HStack {
+          RoundedRectangle(cornerRadius: Constants.General.roundRectCornerRadius)
+            .foregroundColor(foregroundColor)
+            .border(.white)
+            .padding(.trailing, Constants.General.standardPadding)
+          VStack {
+            ColorSliderView(sliderColor: $redColor, colorName: "Red", accentColor: .red)
+            ColorSliderView(sliderColor: $greenColor, colorName: "Green", accentColor: .green)
+            ColorSliderView(sliderColor: $blueColor, colorName: "Blue", accentColor: .blue)
+            
+            SetColorButton(redColor: $redColor, greenColor: $greenColor, blueColor: $blueColor, foregroundColor: $foregroundColor)
+          }
+        }
+      }
     }
     .background(Color("MainBackgroundColor"))
     .padding(Constants.General.standardPadding)
@@ -111,6 +133,9 @@ struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
     ContentView()
     ContentView()
+      .preferredColorScheme(.dark)
+    ContentView()
+      .previewInterfaceOrientation(.landscapeRight)
       .preferredColorScheme(.dark)
   }
 }
