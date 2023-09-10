@@ -42,57 +42,68 @@ struct ContentView: View {
   var body: some View {
 
     VStack {
-      Text("Color Picker")
-        .font(.largeTitle)
+      BannerText(text: "Color Picker")
 
-      RoundedRectangle(cornerRadius: 0)
+      RoundedRectangle(cornerRadius: Constants.General.roundRectCornerRadius)
         .foregroundColor(foregroundColor)
         .border(.white)
-        .padding(.bottom, 20)
-      VStack {
-        Text("Red")
-        HStack {
-          Slider(value: $redColor, in: 0...255)
-            .accentColor(Color(.red))
-          Text("\(Int(redColor.rounded()))")
-        }
+        .padding(.bottom, Constants.General.standardPadding)
+
+      ColorSliderView(sliderColor: $redColor, colorName: "Red", accentColor: .red)
+      ColorSliderView(sliderColor: $greenColor, colorName: "Green", accentColor: .green)
+      ColorSliderView(sliderColor: $blueColor, colorName: "Blue", accentColor: .blue)
+
+      SetColorButton(redColor: $redColor, greenColor: $greenColor, blueColor: $blueColor, foregroundColor: $foregroundColor)
+    }
+    .background(Color("MainBackgroundColor"))
+    .padding(Constants.General.standardPadding)
+
+  }
+}
+
+struct ColorSliderView: View {
+  @Binding var sliderColor: Double
+  var colorName: String
+  var accentColor: Color
+  
+  var body: some View {
+    VStack {
+      SliderLabelText(text: colorName)
+      HStack {
+        Slider(value: $sliderColor, in: 0...255)
+          .accentColor(accentColor)
+        SliderValueText(value: sliderColor)
+          .frame(width: Constants.General.sliderValueTextWidth)
       }
-      VStack {
-        Text("Green")
-        HStack {
-          Slider(value: $greenColor, in: 0...255)
-            .accentColor(Color(.green))
-          Text("\(Int(greenColor.rounded()))")
-        }
-      }
-      VStack {
-        Text("Blue")
-        HStack {
-          Slider(value: $blueColor, in: 0...255)
-            .accentColor(Color(.blue))
-          Text("\(Int(blueColor.rounded()))")
-        }
-      }
+    }
+  }
+}
+
+struct SetColorButton: View {
+  @Binding var redColor: Double
+  @Binding var greenColor: Double
+  @Binding var blueColor: Double
+  @Binding var foregroundColor: Color
+  
+  var body: some View {
+    VStack {
       Button("Set Color") {
         foregroundColor = Color(red: redColor / 255, green: greenColor / 255, blue: blueColor / 255)
       }
-      .padding(20)
+      .padding(Constants.General.standardPadding)
       .background(
         Color(.blue)
       )
       .overlay(
-        RoundedRectangle(cornerRadius: 21.0)
-          .strokeBorder(.white, lineWidth: 2.0)
+        RoundedRectangle(cornerRadius: Constants.General.buttonRectCornerRadius)
+          .strokeBorder(.white, lineWidth: Constants.General.strokeWidth)
       )
       .foregroundColor(
         Color(.white)
       )
-      .cornerRadius(21)
+      .cornerRadius(Constants.General.buttonRectCornerRadius)
       .bold()
     }
-    .background(Color("MainBackgroundColor"))
-    .padding(20)
-
   }
 }
 
