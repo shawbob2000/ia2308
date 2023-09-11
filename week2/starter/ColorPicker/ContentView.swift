@@ -38,49 +38,104 @@ struct ContentView: View {
   @State private var greenColor: Double = 0.0
   @State private var blueColor: Double = 0.0
   @State private var foregroundColor = Color(red: 0, green: 0, blue: 0)
-
+  
+  @Environment(\.verticalSizeClass) var verticalSizeClass
+  @Environment(\.horizontalSizeClass) var horizontalSizeClass
+  
   var body: some View {
-
+    
+    
+    let isPortraitMode = verticalSizeClass == .regular && horizontalSizeClass == .compact
+    
     VStack {
-      Text("Color Picker")
-        .font(.largeTitle)
+      BannerText(text: "Color Picker")
+      
+      if isPortraitMode {
+        RoundedRectangle(cornerRadius: Constants.General.roundRectCornerRadius)
+          .foregroundColor(foregroundColor)
+          .border(.white)
+          .padding(.bottom, Constants.General.standardPadding)
+        
+        ColorSliderView(sliderColor: $redColor, colorName: "Red", accentColor: .red)
+        ColorSliderView(sliderColor: $greenColor, colorName: "Green", accentColor: .green)
+        ColorSliderView(sliderColor: $blueColor, colorName: "Blue", accentColor: .blue)
+        
+        SetColorButton(redColor: $redColor, greenColor: $greenColor, blueColor: $blueColor, foregroundColor: $foregroundColor)
+      } else {
+        HStack {
+          RoundedRectangle(cornerRadius: Constants.General.roundRectCornerRadius)
+            .foregroundColor(foregroundColor)
+            .border(.white)
+            .padding(.trailing, Constants.General.standardPadding)
+          VStack {
+            ColorSliderView(sliderColor: $redColor, colorName: "Red", accentColor: .red)
+            ColorSliderView(sliderColor: $greenColor, colorName: "Green", accentColor: .green)
+            ColorSliderView(sliderColor: $blueColor, colorName: "Blue", accentColor: .blue)
+            
+            SetColorButton(redColor: $redColor, greenColor: $greenColor, blueColor: $blueColor, foregroundColor: $foregroundColor)
+          }
+        }
+      }
+    }
+    .background(Color("MainBackgroundColor"))
+    .padding(Constants.General.standardPadding)
 
-      RoundedRectangle(cornerRadius: 0)
-        .foregroundColor(foregroundColor)
-        .border(.black)
-      VStack {
-        Text("Red")
-        HStack {
-          Slider(value: $redColor, in: 0...255)
-          Text("\(Int(redColor.rounded()))")
-        }
+  }
+}
+
+struct ColorSliderView: View {
+  @Binding var sliderColor: Double
+  var colorName: String
+  var accentColor: Color
+  
+  var body: some View {
+    VStack {
+      SliderLabelText(text: colorName)
+      HStack {
+        Slider(value: $sliderColor, in: 0...255)
+          .accentColor(accentColor)
+        SliderValueText(value: sliderColor)
+          .frame(width: Constants.General.sliderValueTextWidth)
       }
-      VStack {
-        Text("Green")
-        HStack {
-          Slider(value: $greenColor, in: 0...255)
-          Text("\(Int(greenColor.rounded()))")
-        }
-      }
-      VStack {
-        Text("Blue")
-        HStack {
-          Slider(value: $blueColor, in: 0...255)
-          Text("\(Int(blueColor.rounded()))")
-        }
-      }
+    }
+  }
+}
+
+struct SetColorButton: View {
+  @Binding var redColor: Double
+  @Binding var greenColor: Double
+  @Binding var blueColor: Double
+  @Binding var foregroundColor: Color
+  
+  var body: some View {
+    VStack {
       Button("Set Color") {
         foregroundColor = Color(red: redColor / 255, green: greenColor / 255, blue: blueColor / 255)
       }
+      .padding(Constants.General.standardPadding)
+      .background(
+        Color(.blue)
+      )
+      .overlay(
+        RoundedRectangle(cornerRadius: Constants.General.buttonRectCornerRadius)
+          .strokeBorder(.white, lineWidth: Constants.General.strokeWidth)
+      )
+      .foregroundColor(
+        Color(.white)
+      )
+      .cornerRadius(Constants.General.buttonRectCornerRadius)
+      .bold()
     }
-    .background(Color.white)
-    .padding(20)
-
   }
 }
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
     ContentView()
+    ContentView()
+      .preferredColorScheme(.dark)
+    ContentView()
+      .previewInterfaceOrientation(.landscapeRight)
+      .preferredColorScheme(.dark)
   }
 }
